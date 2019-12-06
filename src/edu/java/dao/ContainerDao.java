@@ -3,10 +3,8 @@ package edu.java.dao;
 import edu.java.entity.Environment;
 import edu.java.exception.DaoException;
 
-import static config.AppConfig.appProps;
+import static config.AppConfig.properties;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -23,9 +21,9 @@ public class ContainerDao implements ContainersDao {
 
   private Connection getConnection() throws SQLException {
     Connection connection = DriverManager.getConnection(
-        appProps.getProperty("jdbc.url"),
-        appProps.getProperty("jdbc.username"),
-        appProps.getProperty("jdbc.password"));
+        properties.getProperty("jdbc.url"),
+        properties.getProperty("jdbc.username"),
+        properties.getProperty("jdbc.password"));
     return connection;
   }
 
