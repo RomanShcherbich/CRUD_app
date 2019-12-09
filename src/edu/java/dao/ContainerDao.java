@@ -1,9 +1,10 @@
 package edu.java.dao;
 
+import config.Config;
 import edu.java.entity.Environment;
 import edu.java.exception.DaoException;
 
-import static config.AppConfig.properties;
+import static config.Config.properties;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -21,9 +22,9 @@ public class ContainerDao implements ContainersDao {
 
   private Connection getConnection() throws SQLException {
     Connection connection = DriverManager.getConnection(
-        properties.getProperty("jdbc.url"),
-        properties.getProperty("jdbc.username"),
-        properties.getProperty("jdbc.password"));
+        Config.getProperty(Config.DB_URL),
+        Config.getProperty(Config.DB_LOGIN),
+        Config.getProperty(Config.DB_PASSWORD));
     return connection;
   }
 
@@ -46,7 +47,6 @@ public class ContainerDao implements ContainersDao {
         environment.setHumidity(tblContainers.getInt(3));
         environment.setInternalTime(LocalDateTime.parse(LocalDate.now() + "T" + tblContainers.getString(4)));
         environment.setGlobalTime(LocalDateTime.parse(LocalDate.now() + "T" + tblContainers.getString(5)));
-        return environments;
       }
     } catch (SQLException ex) {
       throw new DaoException(ex);

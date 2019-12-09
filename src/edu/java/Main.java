@@ -1,6 +1,5 @@
 package edu.java;
 
-import config.AppConfig;
 import edu.java.dao.ContainerDao;
 import edu.java.exception.DaoException;
 
