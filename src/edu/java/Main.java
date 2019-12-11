@@ -10,7 +10,7 @@ public class Main {
 
         Class.forName(Config.getProperty(Config.DB_DRIVER));
 
-        new ContainerDao().postEntity(new Environment(1,10,10));
+        System.out.println(new ContainerDao().postEntity(new Environment(1,12,10)));
 
         new ContainerDao().getEntity();
     }

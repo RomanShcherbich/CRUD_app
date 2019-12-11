@@ -50,7 +50,12 @@ public class ContainerDao implements ContainersDao {
     try (Connection connection = getConnection();
          Statement stmt = connection.createStatement()) {
 
-      id = (long) stmt.executeUpdate(INSERT_CONTAINER_DATA + COLUMNS + values);
+      id = (long) stmt.executeUpdate(INSERT_CONTAINER_DATA + COLUMNS + values, new String[]{"temperature"});
+      ResultSet gkRs = stmt.getGeneratedKeys();
+      if(gkRs.next()) {
+        id = gkRs.getLong(1);
+      }
+
     } catch (SQLException | NullPointerException ex) {
       throw new DaoException(ex);
     }
