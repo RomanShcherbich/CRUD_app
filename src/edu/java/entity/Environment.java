@@ -9,6 +9,24 @@ public class Environment implements Entity {
   private LocalDateTime globalTime;
   private LocalDateTime internalTime;
 
+  public Environment(int containerId, int temperature, int humidity, LocalDateTime globalTime, LocalDateTime internalTime) {
+    this.containerId = containerId;
+    this.temperature = temperature;
+    this.humidity = humidity;
+    this.globalTime = globalTime;
+    this.internalTime = internalTime;
+  }
+
+  public Environment(int containerId, int temperature, int humidity) {
+    this.containerId = containerId;
+    this.temperature = temperature;
+    this.humidity = humidity;
+    this.globalTime = LocalDateTime.now();
+    this.internalTime = LocalDateTime.now();
+  }
+
+  public Environment() {}
+
   public int getContainerId() {
     return containerId;
   }
