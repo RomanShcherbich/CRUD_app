@@ -23,19 +23,18 @@ public class ContainerDao implements ContainersDao {
   private String VALUES = "VALUES (%s,%s,%s,%s,%s)";
 
   private Connection getConnection() throws SQLException {
-    Connection connection = DriverManager.getConnection(
+    return DriverManager.getConnection(
         Config.getProperty(Config.DB_URL),
         Config.getProperty(Config.DB_LOGIN),
         Config.getProperty(Config.DB_PASSWORD));
-    return connection;
   }
 
   @Override
   public Long postEntity(Environment environment) throws DaoException {
 
-    Long id;
+    long id;
 
-    StringBuffer values = new StringBuffer();
+    StringBuilder values = new StringBuilder();
     values.append("VALUES (");
     values.append(environment.getContainerId());
     values.append(",");
@@ -51,10 +50,11 @@ public class ContainerDao implements ContainersDao {
     try (Connection connection = getConnection();
          Statement stmt = connection.createStatement()) {
 
-      id = Long.valueOf(stmt.executeUpdate(INSERT_CONTAINER_DATA + COLUMNS + values));
-    } catch (SQLException ex) {
+      id = (long) stmt.executeUpdate(INSERT_CONTAINER_DATA + COLUMNS + values);
+    } catch (SQLException | NullPointerException ex) {
       throw new DaoException(ex);
     }
+
     return id;
   }
 
