@@ -9,5 +9,8 @@
         <module name="ECOntainer" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ECOntainer" target="8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
