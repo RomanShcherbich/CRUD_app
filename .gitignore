@@ -1,5 +1,2 @@
-out
 *.class
-/.idea/
-*.iml
-*.kotlin_module
+/target/

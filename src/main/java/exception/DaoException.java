@@ -1,4 +1,4 @@
-package edu.java.exception;
+package exception;
 
 public class DaoException extends Exception{
   public DaoException() {

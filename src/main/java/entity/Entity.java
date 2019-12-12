@@ -1,4 +1,4 @@
-package edu.java.entity;
+package entity;
 
 public interface Entity {
 }

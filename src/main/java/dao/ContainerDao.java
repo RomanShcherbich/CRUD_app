@@ -1,8 +1,8 @@
-package edu.java.dao;
+package dao;
 
 import config.Config;
-import edu.java.entity.Environment;
-import edu.java.exception.DaoException;
+import entity.Environment;
+import exception.DaoException;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,6 +16,7 @@ import java.util.List;
 public class ContainerDao implements ContainersDao {
 
   private String SELECT_CONTAINER_DATA = "SELECT * FROM containerdata ORDER BY globaltime DESC";
+  private String DELETE_CONTAINER_DATA = "DELETE FROM containerdata";
   private String INSERT_CONTAINER_DATA = "INSERT INTO containerdata ";
   private String COLUMNS = "(containerid,temperature,humidity, internaltime, globaltime) ";
 
@@ -41,6 +42,23 @@ public class ContainerDao implements ContainersDao {
       if(gkRs.next()) {
         id = gkRs.getLong(1);
       }
+
+    } catch (SQLException | NullPointerException ex) {
+      throw new DaoException(ex);
+    }
+
+    return id;
+  }
+
+  @Override
+  public Long deleteAllRows() throws DaoException {
+
+    long id;
+
+    try (Connection connection = getConnection();
+         Statement stmt = connection.createStatement()) {
+
+      id = stmt.executeUpdate(DELETE_CONTAINER_DATA);
 
     } catch (SQLException | NullPointerException ex) {
       throw new DaoException(ex);
@@ -102,6 +120,7 @@ public class ContainerDao implements ContainersDao {
             .replace(" ", "T")));
         environment.setGlobalTime(LocalDateTime.parse(tblContainers.getString(5)
             .replace(" ", "T")));
+        environments.add(environment);
       }
     } catch (SQLException ex) {
       throw new DaoException(ex);

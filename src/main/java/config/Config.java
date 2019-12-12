@@ -14,7 +14,7 @@ public class Config {
 
   public static String getProperty(String name) {
     String propsSuiteName = "properties.suite";
-    String path = "resources/application.properties";
+    String path = "application.properties";
 
     if (properties == null) {
       properties = new Properties();
