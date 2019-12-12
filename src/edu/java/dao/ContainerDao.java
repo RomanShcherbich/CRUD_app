@@ -16,11 +16,9 @@ import java.util.List;
 
 public class ContainerDao implements ContainersDao {
 
-  private String SELECT_CONTAINER_DATA = "SELECT * FROM containerdata ORDER BY globaltime DESC LIMIT 10";
-  private String SELECT_LATEST = "SELECT TOP 1 containerid FROM containerdata ORDER BY globaltime DESC";
-  private String INSERT_CONTAINER_DATA = "INSERT INTO containerdata ";
-  private String COLUMNS = "(containerid,temperature,humidity, internaltime, globaltime) ";
-  private String VALUES = "VALUES (%s,%s,%s,%s,%s)";
+  protected String SELECT_CONTAINER_DATA = "SELECT * FROM containerdata ORDER BY globaltime DESC LIMIT 10";
+  protected String INSERT_CONTAINER_DATA = "INSERT INTO containerdata ";
+  protected String COLUMNS = "(containerid,temperature,humidity, internaltime, globaltime) ";
 
   private Connection getConnection() throws SQLException {
     return DriverManager.getConnection(
@@ -34,18 +32,7 @@ public class ContainerDao implements ContainersDao {
 
     long id;
 
-    StringBuilder values = new StringBuilder();
-    values.append("VALUES (");
-    values.append(environment.getContainerId());
-    values.append(",");
-    values.append(environment.getTemperature());
-    values.append(",");
-    values.append(environment.getHumidity());
-    values.append(",'");
-    values.append(environment.getInternalTime());
-    values.append("','");
-    values.append(environment.getGlobalTime());
-    values.append("')");
+    String values = getStringBuilder(environment);
 
     try (Connection connection = getConnection();
          Statement stmt = connection.createStatement()) {
@@ -61,6 +48,22 @@ public class ContainerDao implements ContainersDao {
     }
 
     return id;
+  }
+
+  private String getStringBuilder(Environment environment) {
+    StringBuilder values = new StringBuilder();
+    values.append("VALUES (");
+    values.append(environment.getContainerId());
+    values.append(",");
+    values.append(environment.getTemperature());
+    values.append(",");
+    values.append(environment.getHumidity());
+    values.append(",'");
+    values.append(environment.getInternalTime());
+    values.append("','");
+    values.append(environment.getGlobalTime());
+    values.append("')");
+    return values.toString();
   }
 
   @Override
