@@ -9,16 +9,15 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ContainerDao implements ContainersDao {
 
-  protected String SELECT_CONTAINER_DATA = "SELECT * FROM containerdata ORDER BY globaltime DESC LIMIT 10";
-  protected String INSERT_CONTAINER_DATA = "INSERT INTO containerdata ";
-  protected String COLUMNS = "(containerid,temperature,humidity, internaltime, globaltime) ";
+  private String SELECT_CONTAINER_DATA = "SELECT * FROM containerdata ORDER BY globaltime DESC";
+  private String INSERT_CONTAINER_DATA = "INSERT INTO containerdata ";
+  private String COLUMNS = "(containerid,temperature,humidity, internaltime, globaltime) ";
 
   private Connection getConnection() throws SQLException {
     return DriverManager.getConnection(
@@ -59,11 +58,27 @@ public class ContainerDao implements ContainersDao {
     values.append(",");
     values.append(environment.getHumidity());
     values.append(",'");
-    values.append(environment.getInternalTime());
+    values.append(getDbTimeStamp(environment.getInternalTime()));
     values.append("','");
-    values.append(environment.getGlobalTime());
+    values.append(getDbTimeStamp(environment.getGlobalTime()));
     values.append("')");
     return values.toString();
+  }
+
+  private String getDbTimeStamp(LocalDateTime localDateTime) {
+    if (Config.getProperty(Config.DB_URL).contains("sqlserver")) {
+      return localDateTime.toString().substring(0, 23);
+    }
+    return localDateTime.toString();
+  }
+
+  private String selectTop(String query, int rows) {
+    if (Config.getProperty(Config.DB_URL).contains("sqlserver")) {
+      query = query.replace("SELECT *","SELECT TOP %s *");
+    } else {
+      query = query + " LIMIT %s";
+    }
+    return String.format(query, rows);
   }
 
   @Override
@@ -72,21 +87,21 @@ public class ContainerDao implements ContainersDao {
     try (Connection connection = getConnection();
          Statement stmt = connection.createStatement()) {
 
-      ResultSet tblContainers = stmt.executeQuery(SELECT_CONTAINER_DATA);
+      ResultSet tblContainers = stmt.executeQuery(selectTop(SELECT_CONTAINER_DATA,10));
 
       while (tblContainers.next()) {
         System.out.println();
         Environment environment = new Environment();
         for (int i = 0; i < tblContainers.getMetaData().getColumnCount(); i++) {
-          System.out.print(tblContainers.getString(i+1) + " : ");
+          System.out.print(tblContainers.getString(i + 1) + " : ");
         }
         environment.setContainerId(tblContainers.getInt("containerId"));
         environment.setTemperature(tblContainers.getInt(2));
         environment.setHumidity(tblContainers.getInt(3));
         environment.setInternalTime(LocalDateTime.parse(tblContainers.getString(4)
-            .replace(" ","T")));
+            .replace(" ", "T")));
         environment.setGlobalTime(LocalDateTime.parse(tblContainers.getString(5)
-            .replace(" ","T")));
+            .replace(" ", "T")));
       }
     } catch (SQLException ex) {
       throw new DaoException(ex);
