@@ -1,17 +1,17 @@
 package edu.java;
 
-import config.AppConfig;
+import config.Config;
 import edu.java.dao.ContainerDao;
+import edu.java.entity.Environment;
 import edu.java.exception.DaoException;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
 public class Main {
+    public static void main(String[] args) throws ClassNotFoundException, DaoException {
 
-    public static void main(String[] args) throws SQLException, ClassNotFoundException, IOException, DaoException {
-        Class.forName("org.postgresql.Driver");
-        AppConfig.appPropsInit();
+        Class.forName(Config.getProperty(Config.DB_DRIVER));
+
+        System.out.println(new ContainerDao().postEntity(new Environment(1,15,10)));
+
         new ContainerDao().getEntity();
     }
 }
