@@ -29,6 +29,9 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="MavenImportPreferences">
     <option name="importingSettings">
       <MavenImportingSettings>
@@ -45,12 +48,13 @@
   <component name="PropertiesComponent">
     <property name="DatabaseDriversLRU" value="postgresql" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4" value="" />
     <property name="extract.method.default.visibility" value="private" />
-    <property name="last_opened_file_path" value="C:/projects/own" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -78,7 +82,7 @@
       </method>
     </configuration>
     <configuration name="ContainerDaoTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="ECOntainer" />
+      <module name="CRUD_app" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="dao.*" />
@@ -87,7 +91,25 @@
       </extension>
       <option name="PACKAGE_NAME" value="dao" />
       <option name="MAIN_CLASS_NAME" value="dao.ContainerDaoTest" />
+      <option name="METHOD_NAME" value="" />
       <option name="TEST_OBJECT" value="class" />
+      <option name="PARAMETERS" value="" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ContainerDaoTest.insertEnvironmentTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="CRUD_app" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="dao.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="dao" />
+      <option name="MAIN_CLASS_NAME" value="dao.ContainerDaoTest" />
+      <option name="METHOD_NAME" value="insertEnvironmentTest" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -95,6 +117,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.ContainerDaoTest" />
+        <item itemvalue="JUnit.ContainerDaoTest.insertEnvironmentTest" />
         <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
@@ -139,6 +162,10 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="557" y="174" key="#ContainerDaoTest" timestamp="1576255494892">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="557" y="174" key="#ContainerDaoTest/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1576255494892" />
     <state x="552" y="178" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1576246549376">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -147,6 +174,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="765" y="229" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1576250399772" />
+    <state x="689" y="303" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1576255492135">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="689" y="303" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1576255492135" />
     <state x="2212" y="125" width="1165" height="574" key="#xdebugger.evaluate" timestamp="1576249149996">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
@@ -155,22 +186,22 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="392" height="466" key="DebuggerActiveHint/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1576168462226" />
-    <state width="1877" height="281" key="GridCell.Tab.0.bottom" timestamp="1576254192949">
+    <state width="1877" height="281" key="GridCell.Tab.0.bottom" timestamp="1576255497564">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="281" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1576254192949" />
-    <state width="1877" height="281" key="GridCell.Tab.0.center" timestamp="1576254192948">
+    <state width="1877" height="281" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1576255497564" />
+    <state width="1877" height="281" key="GridCell.Tab.0.center" timestamp="1576255497564">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="281" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1576254192948" />
-    <state width="1877" height="281" key="GridCell.Tab.0.left" timestamp="1576254192948">
+    <state width="1877" height="281" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1576255497564" />
+    <state width="1877" height="281" key="GridCell.Tab.0.left" timestamp="1576255497564">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="281" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1576254192948" />
-    <state width="1877" height="281" key="GridCell.Tab.0.right" timestamp="1576254192948">
+    <state width="1877" height="281" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1576255497564" />
+    <state width="1877" height="281" key="GridCell.Tab.0.right" timestamp="1576255497564">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="281" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1576254192948" />
+    <state width="1877" height="281" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1576255497564" />
     <state width="1877" height="382" key="GridCell.Tab.1.bottom" timestamp="1576254005247">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -195,10 +226,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="775" y="453" key="ReplaceDuplicatesPrompt/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1576253241169" />
-    <state x="440" y="94" key="SettingsEditor" timestamp="1576148227896">
+    <state x="440" y="94" key="SettingsEditor" timestamp="1576255370102">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="440" y="94" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1576148227896" />
+    <state x="440" y="94" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1576255370102" />
     <state width="498" height="446" key="SwitcherDM" timestamp="1576166308051">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
