@@ -138,6 +138,39 @@ public class Environment implements Entity {
 //        internalTime.getSecond()== that.internalTime.getSecond()+1;
   }
 
+  public boolean equalsReflection(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Environment that = (Environment) o;
+
+    List<String> log = new ArrayList<>();
+
+    try {
+      List<Method> methods = Arrays.stream(getClass().getMethods())
+          .filter(m -> m.getName().contains("get") && !m.getName().contains("Class"))
+          .collect(Collectors.toList());
+      for (Method getValue :
+          methods) {
+        String name = getValue.getName();
+        name = name.substring(3, 4).toLowerCase() + name.substring(4);
+        Object exValue = getValue.invoke(this);
+        Object acValue = getValue.invoke(that);
+
+        equalWithLog(exValue, acValue, name, log);
+
+      }
+
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+
+    if (log.size() != 0) {
+      throw new java.lang.AssertionError("Environment fields are different!\n"
+          + log.stream().collect(Collectors.joining("\n")));
+    }
+    return log.size() == 0;
+  }
+
   private List<String> equalWithLog(Object expected, Object actual, String name, List<String> log) {
     if (!expected.equals(actual)) {
       log.add(formatRight("expected " + name) + expected);

@@ -42,10 +42,19 @@ public class ContainerDaoTest {
     Object expectedEnv = instanceOfEnv(1, 23, 60);
     invokeMethod(post, expectedEnv);
     Object actualEnv = ((ArrayList)invokeMethod(get,1)).get(0);
+    actualEnv  = instanceOfEnv(1, 24, 60);
 
+    Assert.assertTrue("Expected environment: \n" + expectedEnv.toString()
+            + "Actual environment: \n" + actualEnv.toString()
+        , expectedEnv.equals(actualEnv));
+  }
 
-//    LocalDateTime.now().toString() + " " + LocalDateTime.now().toString().length() + "\n"
-//        + java.sql.Timestamp.valueOf(LocalDateTime.now()).toString() + " " + java.sql.Timestamp.valueOf(LocalDateTime.now()).toString().length();
+  @Test
+  public void insertEnvironmentReflectionTest() throws ClassNotFoundException {
+    Object expectedEnv = instanceOfEnv(1, 23, 60);
+    invokeMethod(post, expectedEnv);
+    Object actualEnv = ((ArrayList)invokeMethod(get,1)).get(0);
+    actualEnv  = instanceOfEnv(1, 24, 60);
 
     Assert.assertTrue("Expected environment: \n" + expectedEnv.toString()
             + "Actual environment: \n" + actualEnv.toString()
