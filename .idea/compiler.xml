@@ -10,5 +10,8 @@
         <module name="CRUD_app" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ECOntainer" target="8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

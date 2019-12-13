@@ -32,6 +32,13 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="C:\git\CRUD_app\.idea" />
+      </set>
+    </option>
+  </component>
   <component name="MavenImportPreferences">
     <option name="importingSettings">
       <MavenImportingSettings>
@@ -135,7 +142,7 @@
               <path>
                 <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
                 <item name="root:ECOContainer@localhost" type="7427dc5b:ServiceModel$ServiceGroupNode" />
-                <item name="com.intellij.database.console.session.MessageBusSession@2fd5d3b6" type="9fbbdea:ServiceModel$ServiceNode" />
+                <item name="com.intellij.database.console.session.MessageBusSession@f8971b" type="9fbbdea:ServiceModel$ServiceNode" />
               </path>
             </expand>
             <select />
@@ -155,11 +162,24 @@
       <option name="presentableId" value="Default" />
       <updated>1576148206634</updated>
       <workItem from="1576148211036" duration="35221000" />
+      <workItem from="1576255272367" duration="264000" />
     </task>
+    <task id="LOCAL-00001" summary="unit test for dao updated">
+      <created>1576255533950</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1576255533950</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="unit test for dao updated" />
+    <option name="LAST_COMMIT_MESSAGE" value="unit test for dao updated" />
   </component>
   <component name="WindowStateProjectService">
     <state x="557" y="174" key="#ContainerDaoTest" timestamp="1576255494892">
@@ -182,6 +202,10 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2212" y="125" width="1165" height="574" key="#xdebugger.evaluate/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1576249149996" />
+    <state x="585" y="114" key="CommitChangelistDialog2" timestamp="1576255533099">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="585" y="114" key="CommitChangelistDialog2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1576255533099" />
     <state width="392" height="466" key="DebuggerActiveHint" timestamp="1576168462226">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -262,6 +286,11 @@
           <url>file://$PROJECT_DIR$/src/main/java/entity/Environment.java</url>
           <line>118</line>
           <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/dao/ContainerDaoTest.java</url>
+          <line>13</line>
+          <option name="timeStamp" value="16" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
