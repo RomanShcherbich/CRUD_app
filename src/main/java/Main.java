@@ -13,9 +13,11 @@ public class Main {
         ContainerDao dao = new ContainerDao();
 //        System.out.println(dao.deleteAllRows());
 
-        List<Environment> environments = dao.getEntity();
+        List<Environment> environments = dao.getEntity(1);
 
         int index = environments.isEmpty() ? 0 : environments.get(0).getTemperature();
+
+        System.out.println(environments.get(0).toString());
         System.out.println(dao.postEntity(new Environment(1,++index,60)));
     }
 }

@@ -5,7 +5,6 @@ import entity.Environment;
 import exception.DaoException;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -18,13 +17,10 @@ public class ContainerDao implements ContainersDao {
   private String SELECT_CONTAINER_DATA = "SELECT * FROM containerdata ORDER BY globaltime DESC";
   private String DELETE_CONTAINER_DATA = "DELETE FROM containerdata";
   private String INSERT_CONTAINER_DATA = "INSERT INTO containerdata ";
-  private String COLUMNS = "(containerid,temperature,humidity, internaltime, globaltime) ";
+  private String COLUMNS = "(containerid,temperature,humidity, internaltime, globaltime)";
 
   private Connection getConnection() throws SQLException {
-    return DriverManager.getConnection(
-        Config.getProperty(Config.DB_URL),
-        Config.getProperty(Config.DB_LOGIN),
-        Config.getProperty(Config.DB_PASSWORD));
+    return ConnectionBuilder.getConnection();
   }
 
   @Override
@@ -76,9 +72,13 @@ public class ContainerDao implements ContainersDao {
     values.append(",");
     values.append(environment.getHumidity());
     values.append(",'");
-    values.append(getDbTimeStamp(environment.getInternalTime()));
+//    values.append(getDbTimeStamp(environment.getInternalTime()));
+//    values.append("','");
+//    values.append(getDbTimeStamp(environment.getGlobalTime()));
+//    values.append("')");
+    values.append(environment.getInternalTime());
     values.append("','");
-    values.append(getDbTimeStamp(environment.getGlobalTime()));
+    values.append(environment.getGlobalTime());
     values.append("')");
     return values.toString();
   }
@@ -100,12 +100,12 @@ public class ContainerDao implements ContainersDao {
   }
 
   @Override
-  public List<Environment> getEntity() throws DaoException {
+  public List<Environment> getEntity(int topRows) throws DaoException {
     List<Environment> environments = new ArrayList<>();
     try (Connection connection = getConnection();
          Statement stmt = connection.createStatement()) {
 
-      ResultSet tblContainers = stmt.executeQuery(selectTop(SELECT_CONTAINER_DATA,10));
+      ResultSet tblContainers = stmt.executeQuery(selectTop(SELECT_CONTAINER_DATA,topRows));
 
       while (tblContainers.next()) {
         System.out.println();
@@ -116,10 +116,10 @@ public class ContainerDao implements ContainersDao {
         environment.setContainerId(tblContainers.getInt("containerId"));
         environment.setTemperature(tblContainers.getInt(2));
         environment.setHumidity(tblContainers.getInt(3));
-        environment.setInternalTime(LocalDateTime.parse(tblContainers.getString(4)
-            .replace(" ", "T")));
-        environment.setGlobalTime(LocalDateTime.parse(tblContainers.getString(5)
-            .replace(" ", "T")));
+//        environment.setInternalTime(LocalDateTime.parse(tblContainers.getString(4)
+//            .replace(" ", "T")));
+        environment.setInternalTime(tblContainers.getTimestamp(4));
+        environment.setGlobalTime(tblContainers.getTimestamp(5));
         environments.add(environment);
       }
     } catch (SQLException ex) {
@@ -127,30 +127,4 @@ public class ContainerDao implements ContainersDao {
     }
     return environments;
   }
-
-/*
-  private Environment resultToEntity(ResultSet resultSet) throws SQLException, InvocationTargetException, IllegalAccessException {
-
-    Environment environment = new Environment();
-    resultSet.getMetaData().getColumnName(1)
-    environment.getClass().getMethods();
-    for (Method method :
-        environment.getClass().getMethods()
-    ) {
-      String methodName = method.getName();
-      if (method.getName().contains("set")) {
-        String parameter = methodName.substring(3);
-
-        Class<?>[] types = method.getParameterTypes();
-        String type = types[0].getName();
-        type = type.substring(0,1).toUpperCase() + type.substring(1);
-
-        method.invoke(environment, resultSet.getString(parameter));
-        method.getParameterTypes();
-        System.out.println(parameter);
-      }
-    }
-    return environment;
-  }*/
-
 }
