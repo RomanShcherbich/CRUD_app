@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -63,8 +62,8 @@ public class Environment implements Entity {
     this.lightGrow = true;
     this.lightSeed = false;
     this.lightWork = true;
-    this.globalTime = Timestamp.valueOf(LocalDateTime.now());
-    this.internalTime = Timestamp.valueOf(LocalDateTime.now());
+    this.globalTime = new Timestamp(System.currentTimeMillis());
+    this.internalTime = new Timestamp(System.currentTimeMillis());
   }
 
   public Environment() {
@@ -168,28 +167,33 @@ public class Environment implements Entity {
 
   @Override
   public String toString() {
-    String log = new String();
+    String string;
 
     try {
-      List<Method> methods = Arrays.stream(getClass().getMethods())
-          .filter(m -> m.getName().contains("get") && !m.getName().contains("Class"))
-          .collect(Collectors.toList());
-      for (Method getValue :
+      Class environment = getClass();
+      string = environment.getSimpleName() + ":\n";
+      List<Method> methods = Arrays.asList(environment.getMethods());
+      for (Method m :
           methods) {
-        String name = getValue.getName();
-        name = name.substring(3, 4).toLowerCase() + name.substring(4);
-        String value = getValue.invoke(this).toString();
-        log += (name + " = " + value + "\n");
+        if ((m.getName().contains("get") || m.getName().contains("is"))
+                && !m.getName().contains("Class")){
+          String name = m.getName();
+          name = name.replace("get", "");
+          name = name.replace("is", "");
+          name = name.substring(0, 1).toLowerCase() + name.substring(1);
+          String value = m.invoke(this).toString();
+          string += (name + " = " + value + "\n");
+        }
       }
 
     } catch (Exception ex) {
-      ex.printStackTrace();
+      throw new RuntimeException("override method toString is a reason!");
     }
 
-    return log;
+    return string;
   }
 
-  public boolean equalsReflection(Object o) {
+  public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Environment that = (Environment) o;
@@ -209,14 +213,15 @@ public class Environment implements Entity {
     equalWithLog(internalTime, that.internalTime, "internalTime", log);
     equalWithLog(globalTime, that.globalTime, "globalTime", log);
 
+
     if (log.size() != 0) {
-      throw new java.lang.AssertionError("Environment fields are different!\n"
-          + log.stream().collect(Collectors.joining("\n")));
+      logger.debug("Environment fields are different!\n{}", log.stream().collect(Collectors.joining("\n")));
     }
+
     return log.size() == 0;
   }
 
-  public boolean equals(Object o) {
+  public boolean equalsReflection(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Environment that = (Environment) o;
@@ -243,9 +248,7 @@ public class Environment implements Entity {
     }
 
     if (log.size() != 0) {
-//      throw new java.lang.AssertionError("Environment fields are different!\n"
-//          + log.stream().collect(Collectors.joining("\n")));
-      logger.debug("Environment fields are different!\n{}",log.stream().collect(Collectors.joining("\n")));
+      logger.debug("Environment fields are different!\n{}", log.stream().collect(Collectors.joining("\n")));
     }
 
     return log.size() == 0;

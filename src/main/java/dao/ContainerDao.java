@@ -1,8 +1,8 @@
 package dao;
 
 import static utils.DaoUtils.booleanToBit;
+import static utils.DaoUtils.selectTop;
 
-import config.Config;
 import entity.Environment;
 import exception.DaoException;
 
@@ -10,7 +10,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +35,7 @@ public class ContainerDao implements ContainersDao {
     try (Connection connection = getConnection();
          Statement stmt = connection.createStatement()) {
 
-      id = (long) stmt.executeUpdate(INSERT_CONTAINER_DATA + COLUMNS + values, new String[]{"airTemp"});
+      id = stmt.executeUpdate(INSERT_CONTAINER_DATA + COLUMNS + values, new String[]{"airtemp"});
       ResultSet gkRs = stmt.getGeneratedKeys();
       if (gkRs.next()) {
         id = gkRs.getLong(1);
@@ -92,31 +91,11 @@ public class ContainerDao implements ContainersDao {
     values.append(",");
     values.append(booleanToBit(environment.isLightWork()));
     values.append(",'");
-//    values.append(getDbTimeStamp(environment.getInternalTime()));
-//    values.append("','");
-//    values.append(getDbTimeStamp(environment.getGlobalTime()));
-//    values.append("')");
     values.append(environment.getInternalTime());
     values.append("','");
     values.append(environment.getGlobalTime());
     values.append("')");
     return values.toString();
-  }
-
-  private String getDbTimeStamp(LocalDateTime localDateTime) {
-    if (Config.getProperty(Config.DB_URL).contains("sqlserver")) {
-      return localDateTime.toString().substring(0, 23);
-    }
-    return localDateTime.toString();
-  }
-
-  private String selectTop(String query, int rows) {
-    if (Config.getProperty(Config.DB_URL).contains("sqlserver")) {
-      query = query.replace("SELECT *", "SELECT TOP %s *");
-    } else {
-      query = query + " LIMIT %s";
-    }
-    return String.format(query, rows);
   }
 
   @Override
@@ -130,9 +109,7 @@ public class ContainerDao implements ContainersDao {
       while (tblContainers.next()) {
         System.out.println();
         Environment environment = new Environment();
-//        for (int i = 0; i < tblContainers.getMetaData().getColumnCount(); i++) {
-//          System.out.print(tblContainers.getString(i + 1) + " : ");
-//        }
+
         environment.setContainerId(tblContainers.getInt("containerId"));
         environment.setAirTemp(tblContainers.getInt("airTemp"));
         environment.setAirHumidity(tblContainers.getInt("airHumidity"));

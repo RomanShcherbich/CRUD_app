@@ -11,60 +11,53 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ContainerDaoTest {
 
   public static Constructor cst;
-  public static Method post;
+  public static Class daoClass;
   public static Object dao;
   public static Method get;
+  public static Method post;
 
   private static final Logger logger = LoggerFactory.getLogger(ContainerDaoTest.class);
 
   @BeforeClass
   public static void setUp() {
+    daoClass = getClass("dao.ContainerDao");
     try {
-      Class ec = Class.forName("entity.Environment");
-      cst = ec.getConstructor(int.class, int.class, int.class);
+      Class environment = getClass("entity.Environment");
+      cst = environment.getConstructor(int.class, int.class, int.class);
 
-      Class daoClass = Class.forName("dao.ContainerDao");
       dao = daoClass.getConstructor().newInstance();
-
-      post = daoClass.getMethod("postEntity", ec);
-      get = daoClass.getMethod("getEntity", int.class);
-
-    } catch (ClassNotFoundException | NoSuchMethodException ex) {
+      post = getMethod("postEntity", environment);
+      get = getMethod("getEntity", int.class);
+    } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException ex) {
       ex.printStackTrace();
-    } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
-      e.printStackTrace();
     }
   }
 
   @Test
-  public void insertEnvironmentTest() throws ClassNotFoundException {
-    Object expectedEnv = instanceOfEnv(1, 23, 60);
+  public void insertEnvironmentTest() throws NoSuchMethodException {
+    Object expectedEnv = instanceOfEnv(1, 27, 61);
     invokeMethod(post, expectedEnv);
-    Object actualEnv = ((ArrayList)invokeMethod(get,1)).get(0);
-    actualEnv  = instanceOfEnv(1, 24, 60);
+    Object actualEnv = ((ArrayList) invokeMethod(get, 1)).get(0);
 
-//    logger.debug("Test {}", actualEnv);
+//    actualEnv  = instanceOfEnv(1, 24, 60);
+    logger.debug("Object expectedEnv \n{}", expectedEnv);
 
-    Assert.assertTrue("Expected environment: \n" + expectedEnv.toString()
-            + "Actual environment: \n" + actualEnv.toString()
-        , expectedEnv.equals(actualEnv));
+    Assert.assertTrue("Environment fields are different!", expectedEnv.equals(actualEnv));
   }
 
   @Test
-  public void insertEnvironmentReflectionTest() throws ClassNotFoundException {
-    Object expectedEnv = instanceOfEnv(1, 55, 60);
-    invokeMethod(post, expectedEnv);
-    Object actualEnv = ((ArrayList)invokeMethod(get,1)).get(0);
-    actualEnv  = instanceOfEnv(1, 56, 60);
+  public void deleteTableTest() {
+    Method deleteAll = getMethod("deleteAllRows");
+    invokeMethod(deleteAll);
+    List<Object> actualEnv = (ArrayList) invokeMethod(get, 1);
 
-    Assert.assertTrue("Expected environment: \n" + expectedEnv.toString()
-            + "Actual environment: \n" + actualEnv.toString()
-        , expectedEnv.equals(actualEnv));
+    Assert.assertTrue("Environment fields are different!", actualEnv.isEmpty());
   }
 
   public Object instanceOfEnv(int containerId, int temperature, int humidity) {
@@ -94,5 +87,32 @@ public class ContainerDaoTest {
       e.printStackTrace();
     }
     return object;
+  }
+
+  public Method getMethod(String methodName) {
+    try {
+      return daoClass.getMethod(methodName);
+    } catch (NoSuchMethodException ex) {
+      ex.printStackTrace();
+    }
+    return null;
+  }
+
+  public static Method getMethod(String methodName, Class argClass) {
+    try {
+      return daoClass.getMethod(methodName, argClass);
+    } catch (NoSuchMethodException ex) {
+      ex.printStackTrace();
+    }
+    return null;
+  }
+
+  public static Class getClass(String className) {
+    try {
+      return Class.forName(className);
+    } catch (ClassNotFoundException ex) {
+      ex.printStackTrace();
+    }
+    return null;
   }
 }

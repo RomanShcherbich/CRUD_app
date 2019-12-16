@@ -19,7 +19,7 @@
 
     <root>
         <!--all,trace,debug,info,warn,error,fatal-->
-        <priority value ="debug"></priority>
+        <priority value ="info"></priority>
         <appender-ref ref="console"/>
         <appender-ref ref="fileAppender"/>
     </root>
