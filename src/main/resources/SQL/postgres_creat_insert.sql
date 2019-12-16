@@ -11,8 +11,8 @@ CREATE TABLE containers
 CREATE TABLE containerData
 (
     containerId  integer NOT NULL,
-    temperature  integer NOT NULL,
-    humidity     integer NOT NULL,
+    airTemp  integer NOT NULL,
+    airHumidity     integer NOT NULL,
     internalTime timestamp,
     globalTime   timestamp,
     CONSTRAINT containerId FOREIGN KEY (containerId)
@@ -25,8 +25,8 @@ INSERT INTO containers(id,
 VALUES (1, 'prototype');
 
 INSERT INTO containerdata
-(containerid, temperature, humidity, internaltime, globaltime)
+(containerid, airTemp, airHumidity, internaltime, globaltime)
 VALUES (1, 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
-SELECT containerid, temperature, humidity, internaltime, globaltime
+SELECT containerid, airTemp, airHumidity, internaltime, globaltime
 FROM containerdata;

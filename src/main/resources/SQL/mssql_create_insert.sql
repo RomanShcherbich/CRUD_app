@@ -10,11 +10,18 @@ CREATE TABLE containers (
 CREATE TABLE containerData
 (
     containerId INTEGER NOT NULL,
-    temperature INTEGER NOT NULL,
-    humidity INTEGER NOT NULL,
+    airTemp INTEGER,
+    airHumidity INTEGER,
+    airCo2 INTEGER,
+    airVentilation BIT,
+    waterPh FLOAT,
+    waterEc INTEGER,
+    lightGrow BIT,
+    lightSeed BIT,
+    lightWork BIT,
     internalTime DATETIME2,
     globalTime DATETIME2,
-    FOREIGN KEY (containerId) REFERENCES containers(id)
+    FOREIGN KEY (containerId) REFERENCES containers(id) ON DELETE NO ACTION
 )
 
 INSERT INTO containers(
@@ -22,6 +29,10 @@ INSERT INTO containers(
 	VALUES ( 'prototype');
 
 INSERT INTO containerdata
-SELECT 1,1,1,SYSDATETIME(),SYSDATETIME()
-
-SELECT * FROM containerData
+(containerId, airTemp, airHumidity, airCo2, airVentilation, waterPh, waterEc, lightGrow, lightSeed, lightWork, internalTime, globalTime)
+VALUES
+ (1,20,75,1200,1,6.2,900,1,0,1,SYSDATETIME(),SYSDATETIME())
+,(1,21,75,1200,1,6.4,900,1,0,1,SYSDATETIME(),SYSDATETIME())
+,(1,21,75,1200,1,'6.2',900,1,0,1,SYSDATETIME(),SYSDATETIME())
+,(1,22,74,1200,1,'6.2',900,1,0,1,SYSDATETIME(),SYSDATETIME())
+,(1,22,73,1200,1,'6.2',900,1,0,1,SYSDATETIME(),SYSDATETIME())

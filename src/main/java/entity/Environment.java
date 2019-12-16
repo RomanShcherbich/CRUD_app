@@ -1,37 +1,64 @@
 package entity;
 
-import exception.EntityException;
-
 import java.lang.reflect.Method;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Environment implements Entity {
   private int containerId;
-  private int temperature;
-  private int humidity;
-  private Timestamp globalTime;
+  private int airTemp;
+  private int airHumidity;
+  private int airCo2;
+  private boolean airVentilation;
+  private double waterPh;
+  private int waterEc;
+  private boolean lightGrow;
+  private boolean lightSeed;
+  private boolean lightWork;
   private Timestamp internalTime;
+  private Timestamp globalTime;
 
-  public Environment(int containerId, int temperature, int humidity, Timestamp globalTime, Timestamp internalTime) {
+  public Environment(int containerId, int airTemp, int airHumidity, int airCo2, boolean airVentilation, int waterPh,
+                     int waterEc, boolean lightGrow, boolean lightSeed, boolean lightWork, Timestamp internalTime,
+                     Timestamp globalTime) {
     this.containerId = containerId;
-    this.temperature = temperature;
-    this.humidity = humidity;
+    this.airTemp = airTemp;
+    this.airHumidity = airHumidity;
+    this.airCo2 = airCo2;
+    this.airVentilation = airVentilation;
+    this.waterPh = waterPh;
+    this.waterEc = waterEc;
+    this.lightGrow = lightGrow;
+    this.lightSeed = lightSeed;
+    this.lightWork = lightWork;
+    this.internalTime = internalTime;
+    this.globalTime = globalTime;
+  }
+
+  public Environment(int containerId, int temperature, int airHumidity, Timestamp globalTime, Timestamp internalTime) {
+    this.containerId = containerId;
+    this.airTemp = temperature;
+    this.airHumidity = airHumidity;
     this.globalTime = globalTime;
     this.internalTime = internalTime;
   }
 
-  public Environment(int containerId, int temperature, int humidity) {
+  public Environment(int containerId, int temperature, int airHumidity) {
     this.containerId = containerId;
-    this.temperature = temperature;
-    this.humidity = humidity;
+    this.airTemp = temperature;
+    this.airHumidity = airHumidity;
+    this.airCo2 = 1200;
+    this.airVentilation = true;
+    this.waterPh = 6.2;
+    this.waterEc = 900;
+    this.lightGrow = true;
+    this.lightSeed = false;
+    this.lightWork = true;
     this.globalTime = Timestamp.valueOf(LocalDateTime.now());
     this.internalTime = Timestamp.valueOf(LocalDateTime.now());
   }
@@ -47,28 +74,76 @@ public class Environment implements Entity {
     this.containerId = containerId;
   }
 
-  public int getTemperature() {
-    return temperature;
+  public int getAirTemp() {
+    return airTemp;
   }
 
-  public void setTemperature(int temperature) {
-    this.temperature = temperature;
+  public void setAirTemp(int airTemp) {
+    this.airTemp = airTemp;
   }
 
-  public int getHumidity() {
-    return humidity;
+  public int getAirHumidity() {
+    return airHumidity;
   }
 
-  public void setHumidity(int humidity) {
-    this.humidity = humidity;
+  public void setAirHumidity(int airHumidity) {
+    this.airHumidity = airHumidity;
   }
 
-  public Timestamp getGlobalTime() {
-    return globalTime;
+  public int getAirCo2() {
+    return airCo2;
   }
 
-  public void setGlobalTime(Timestamp globalTime) {
-    this.globalTime = globalTime;
+  public void setAirCo2(int airCo2) {
+    this.airCo2 = airCo2;
+  }
+
+  public boolean isAirVentilation() {
+    return airVentilation;
+  }
+
+  public void setAirVentilation(boolean airVentilation) {
+    this.airVentilation = airVentilation;
+  }
+
+  public double getWaterPh() {
+    return waterPh;
+  }
+
+  public void setWaterPh(double waterPh) {
+    this.waterPh = waterPh;
+  }
+
+  public int getWaterEc() {
+    return waterEc;
+  }
+
+  public void setWaterEc(int waterEc) {
+    this.waterEc = waterEc;
+  }
+
+  public boolean isLightGrow() {
+    return lightGrow;
+  }
+
+  public void setLightGrow(boolean lightGrow) {
+    this.lightGrow = lightGrow;
+  }
+
+  public boolean isLightSeed() {
+    return lightSeed;
+  }
+
+  public void setLightSeed(boolean lightSeed) {
+    this.lightSeed = lightSeed;
+  }
+
+  public boolean isLightWork() {
+    return lightWork;
+  }
+
+  public void setLightWork(boolean lightWork) {
+    this.lightWork = lightWork;
   }
 
   public Timestamp getInternalTime() {
@@ -77,6 +152,14 @@ public class Environment implements Entity {
 
   public void setInternalTime(Timestamp internalTime) {
     this.internalTime = internalTime;
+  }
+
+  public Timestamp getGlobalTime() {
+    return globalTime;
+  }
+
+  public void setGlobalTime(Timestamp globalTime) {
+    this.globalTime = globalTime;
   }
 
   @Override
@@ -111,10 +194,17 @@ public class Environment implements Entity {
     List<String> log = new ArrayList<>();
 
     equalWithLog(containerId, that.containerId, "containerId", log);
-    equalWithLog(temperature, that.temperature, "temperature", log);
-    equalWithLog(humidity, that.humidity, "humidity", log);
-    equalWithLog(globalTime, that.globalTime, "globalTime", log);
+    equalWithLog(airTemp, that.airTemp, "airTemp", log);
+    equalWithLog(airHumidity, that.airHumidity, "airHumidity", log);
+    equalWithLog(airCo2, that.airCo2, "airCo2", log);
+    equalWithLog(airVentilation, that.airVentilation, "airVentilation", log);
+    equalWithLog(waterPh, that.waterPh, "waterPh", log);
+    equalWithLog(waterEc, that.waterEc, "waterEc", log);
+    equalWithLog(lightGrow, that.lightGrow, "lightGrow", log);
+    equalWithLog(lightSeed, that.lightSeed, "lightSeed", log);
+    equalWithLog(lightWork, that.lightWork, "lightWork", log);
     equalWithLog(internalTime, that.internalTime, "internalTime", log);
+    equalWithLog(globalTime, that.globalTime, "globalTime", log);
 
     if (log.size() != 0) {
       throw new java.lang.AssertionError("Environment fields are different!\n"
@@ -122,8 +212,8 @@ public class Environment implements Entity {
     }
     return log.size() == 0;
 //        containerId == that.containerId &&
-//        temperature == that.temperature &&
-//        humidity == that.humidity &&
+//        airTemp == that.airTemp &&
+//        airHumidity == that.airHumidity &&
 ////        internalTime.toString().substring(0,23).equals(that.internalTime.toString().substring(0,23)) &&
 ////        globalTime.toString().substring(0,23).equals(that.globalTime.toString().substring(0,23));
 //        globalTime.equals(that.globalTime) &&
@@ -185,6 +275,6 @@ public class Environment implements Entity {
 
   @Override
   public int hashCode() {
-    return Objects.hash(containerId, temperature, humidity, globalTime, internalTime);
+    return Objects.hash(containerId, airTemp, airHumidity, globalTime, internalTime);
   }
 }

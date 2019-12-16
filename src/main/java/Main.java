@@ -14,7 +14,7 @@ public class Main {
 
         List<Environment> environments = dao.getEntity(1);
 
-        int index = environments.isEmpty() ? 0 : environments.get(0).getTemperature();
+        int index = environments.isEmpty() ? 0 : environments.get(0).getAirTemp();
 
         System.out.println(environments.get(0).toString());
         System.out.println(dao.postEntity(new Environment(1,++index,60)));

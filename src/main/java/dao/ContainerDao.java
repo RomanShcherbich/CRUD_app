@@ -1,5 +1,7 @@
 package dao;
 
+import static utils.DaoUtils.booleanToBit;
+
 import config.Config;
 import entity.Environment;
 import exception.DaoException;
@@ -17,7 +19,8 @@ public class ContainerDao implements ContainersDao {
   private String SELECT_CONTAINER_DATA = "SELECT * FROM containerdata ORDER BY globaltime DESC";
   private String DELETE_CONTAINER_DATA = "DELETE FROM containerdata";
   private String INSERT_CONTAINER_DATA = "INSERT INTO containerdata ";
-  private String COLUMNS = "(containerid,temperature,humidity, internaltime, globaltime)";
+  private String COLUMNS = "(containerId, airTemp, airHumidity, airCo2, airVentilation, waterPh, waterEc,"
+      + " lightGrow, lightSeed, lightWork, internalTime, globalTime)";
 
   private Connection getConnection() throws SQLException {
     return ConnectionBuilder.getConnection();
@@ -33,9 +36,9 @@ public class ContainerDao implements ContainersDao {
     try (Connection connection = getConnection();
          Statement stmt = connection.createStatement()) {
 
-      id = (long) stmt.executeUpdate(INSERT_CONTAINER_DATA + COLUMNS + values, new String[]{"temperature"});
+      id = (long) stmt.executeUpdate(INSERT_CONTAINER_DATA + COLUMNS + values, new String[]{"airTemp"});
       ResultSet gkRs = stmt.getGeneratedKeys();
-      if(gkRs.next()) {
+      if (gkRs.next()) {
         id = gkRs.getLong(1);
       }
 
@@ -64,13 +67,30 @@ public class ContainerDao implements ContainersDao {
   }
 
   private String getStringBuilder(Environment environment) {
+
+    Boolean t = true;
+    t.booleanValue();
     StringBuilder values = new StringBuilder();
     values.append("VALUES (");
     values.append(environment.getContainerId());
     values.append(",");
-    values.append(environment.getTemperature());
+    values.append(environment.getAirTemp());
     values.append(",");
-    values.append(environment.getHumidity());
+    values.append(environment.getAirHumidity());
+    values.append(",");
+    values.append(environment.getAirCo2());
+    values.append(",");
+    values.append(booleanToBit(environment.isAirVentilation()));
+    values.append(",");
+    values.append(environment.getWaterPh());
+    values.append(",");
+    values.append(environment.getWaterEc());
+    values.append(",");
+    values.append(booleanToBit(environment.isLightGrow()));
+    values.append(",");
+    values.append(booleanToBit(environment.isLightSeed()));
+    values.append(",");
+    values.append(booleanToBit(environment.isLightWork()));
     values.append(",'");
 //    values.append(getDbTimeStamp(environment.getInternalTime()));
 //    values.append("','");
@@ -92,7 +112,7 @@ public class ContainerDao implements ContainersDao {
 
   private String selectTop(String query, int rows) {
     if (Config.getProperty(Config.DB_URL).contains("sqlserver")) {
-      query = query.replace("SELECT *","SELECT TOP %s *");
+      query = query.replace("SELECT *", "SELECT TOP %s *");
     } else {
       query = query + " LIMIT %s";
     }
@@ -105,7 +125,7 @@ public class ContainerDao implements ContainersDao {
     try (Connection connection = getConnection();
          Statement stmt = connection.createStatement()) {
 
-      ResultSet tblContainers = stmt.executeQuery(selectTop(SELECT_CONTAINER_DATA,topRows));
+      ResultSet tblContainers = stmt.executeQuery(selectTop(SELECT_CONTAINER_DATA, topRows));
 
       while (tblContainers.next()) {
         System.out.println();
@@ -114,12 +134,17 @@ public class ContainerDao implements ContainersDao {
           System.out.print(tblContainers.getString(i + 1) + " : ");
         }
         environment.setContainerId(tblContainers.getInt("containerId"));
-        environment.setTemperature(tblContainers.getInt(2));
-        environment.setHumidity(tblContainers.getInt(3));
-//        environment.setInternalTime(LocalDateTime.parse(tblContainers.getString(4)
-//            .replace(" ", "T")));
-        environment.setInternalTime(tblContainers.getTimestamp(4));
-        environment.setGlobalTime(tblContainers.getTimestamp(5));
+        environment.setAirTemp(tblContainers.getInt("airTemp"));
+        environment.setAirHumidity(tblContainers.getInt("airHumidity"));
+        environment.setAirCo2(tblContainers.getInt("airCo2"));
+        environment.setAirVentilation(tblContainers.getBoolean("airVentilation"));
+        environment.setWaterPh(tblContainers.getDouble("waterPh"));
+        environment.setWaterEc(tblContainers.getInt("waterEc"));
+        environment.setLightGrow(tblContainers.getBoolean("lightGrow"));
+        environment.setLightSeed(tblContainers.getBoolean("lightSeed"));
+        environment.setLightWork(tblContainers.getBoolean("lightWork"));
+        environment.setInternalTime(tblContainers.getTimestamp("internalTime"));
+        environment.setGlobalTime(tblContainers.getTimestamp("globalTime"));
         environments.add(environment);
       }
     } catch (SQLException ex) {
