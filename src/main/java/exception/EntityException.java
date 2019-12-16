@@ -1,6 +1,6 @@
 package exception;
 
-public class EntityException extends Exception{
+public class EntityException extends RuntimeException{
   public EntityException() {
   }
 

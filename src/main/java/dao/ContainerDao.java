@@ -5,6 +5,8 @@ import static utils.DaoUtils.selectTop;
 
 import entity.Environment;
 import exception.DaoException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -14,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ContainerDao implements ContainersDao {
+
+  private static final Logger logger = LoggerFactory.getLogger(ContainerDao.class);
 
   private String SELECT_CONTAINER_DATA = "SELECT * FROM containerdata ORDER BY globaltime DESC";
   private String DELETE_CONTAINER_DATA = "DELETE FROM containerdata";
@@ -35,17 +39,26 @@ public class ContainerDao implements ContainersDao {
     try (Connection connection = getConnection();
          Statement stmt = connection.createStatement()) {
 
-      id = stmt.executeUpdate(INSERT_CONTAINER_DATA + COLUMNS + values, new String[]{"airtemp"});
+      String sql = INSERT_CONTAINER_DATA + COLUMNS + values;
+
+      logSql(sql);
+
+      id = stmt.executeUpdate(sql, new String[]{"airtemp"});
       ResultSet gkRs = stmt.getGeneratedKeys();
       if (gkRs.next()) {
         id = gkRs.getLong(1);
       }
 
     } catch (SQLException | NullPointerException ex) {
+      logger.error(ex.getMessage(), ex);
       throw new DaoException(ex);
     }
 
     return id;
+  }
+
+  private void logSql(String sql) {
+    logger.info("executing sql script:\n{}",sql);
   }
 
   @Override
@@ -56,9 +69,12 @@ public class ContainerDao implements ContainersDao {
     try (Connection connection = getConnection();
          Statement stmt = connection.createStatement()) {
 
+      logSql(DELETE_CONTAINER_DATA);
+
       id = stmt.executeUpdate(DELETE_CONTAINER_DATA);
 
     } catch (SQLException | NullPointerException ex) {
+      logger.error(ex.getMessage(), ex);
       throw new DaoException(ex);
     }
 
@@ -104,10 +120,12 @@ public class ContainerDao implements ContainersDao {
     try (Connection connection = getConnection();
          Statement stmt = connection.createStatement()) {
 
-      ResultSet tblContainers = stmt.executeQuery(selectTop(SELECT_CONTAINER_DATA, topRows));
+      String sql = selectTop(SELECT_CONTAINER_DATA, topRows);
+      logSql(sql);
+
+      ResultSet tblContainers = stmt.executeQuery(sql);
 
       while (tblContainers.next()) {
-        System.out.println();
         Environment environment = new Environment();
 
         environment.setContainerId(tblContainers.getInt("containerId"));
@@ -125,6 +143,7 @@ public class ContainerDao implements ContainersDao {
         environments.add(environment);
       }
     } catch (SQLException ex) {
+      logger.error(ex.getMessage(), ex);
       throw new DaoException(ex);
     }
     return environments;

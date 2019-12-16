@@ -11,6 +11,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -45,10 +46,15 @@ public class ContainerDaoTest {
     invokeMethod(post, expectedEnv);
     Object actualEnv = ((ArrayList) invokeMethod(get, 1)).get(0);
 
-//    actualEnv  = instanceOfEnv(1, 24, 60);
+    actualEnv  = instanceOfEnv(1, 24, 60);
     logger.debug("Object expectedEnv \n{}", expectedEnv);
+    List<String> expectedFields = Arrays.asList(expectedEnv.toString().split(";"));
+    List<String> actualFields = Arrays.asList(actualEnv.toString().split(";"));
+    expectedFields.replaceAll(e -> actualFields.contains(e));
+    actualFields.removeAll(expectedFields);
 
-    Assert.assertTrue("Environment fields are different!", expectedEnv.equals(actualEnv));
+    Assert.assertTrue("Environment fields are different!\n"
+        + expectedEnv.toString() + "\n" + actualEnv.toString(), expectedEnv.equals(actualEnv));
   }
 
   @Test
@@ -57,7 +63,7 @@ public class ContainerDaoTest {
     invokeMethod(deleteAll);
     List<Object> actualEnv = (ArrayList) invokeMethod(get, 1);
 
-    Assert.assertTrue("Environment fields are different!", actualEnv.isEmpty());
+    Assert.assertTrue("the table contains rows!", actualEnv.isEmpty());
   }
 
   public Object instanceOfEnv(int containerId, int temperature, int humidity) {

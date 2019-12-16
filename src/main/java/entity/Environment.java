@@ -1,5 +1,8 @@
 package entity;
 
+import static utils.StringUtils.formatRight;
+
+import exception.EntityException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -167,61 +170,34 @@ public class Environment implements Entity {
 
   @Override
   public String toString() {
-    String string;
+    String string = new String();
 
     try {
       Class environment = getClass();
-      string = environment.getSimpleName() + ":\n";
       List<Method> methods = Arrays.asList(environment.getMethods());
       for (Method m :
           methods) {
         if ((m.getName().contains("get") || m.getName().contains("is"))
-                && !m.getName().contains("Class")){
+            && !m.getName().contains("Class")) {
           String name = m.getName();
           name = name.replace("get", "");
           name = name.replace("is", "");
           name = name.substring(0, 1).toLowerCase() + name.substring(1);
           String value = m.invoke(this).toString();
-          string += (name + " = " + value + "\n");
+          string += formatRight(name,4) + value + "; ";
         }
       }
 
     } catch (Exception ex) {
-      throw new RuntimeException("override method toString is a reason!");
+      logger.error(ex.getMessage(), ex);
+      throw new EntityException("override method toString is a reason!", ex);
     }
 
     return string;
   }
 
+  @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    Environment that = (Environment) o;
-
-    List<String> log = new ArrayList<>();
-
-    equalWithLog(containerId, that.containerId, "containerId", log);
-    equalWithLog(airTemp, that.airTemp, "airTemp", log);
-    equalWithLog(airHumidity, that.airHumidity, "airHumidity", log);
-    equalWithLog(airCo2, that.airCo2, "airCo2", log);
-    equalWithLog(airVentilation, that.airVentilation, "airVentilation", log);
-    equalWithLog(waterPh, that.waterPh, "waterPh", log);
-    equalWithLog(waterEc, that.waterEc, "waterEc", log);
-    equalWithLog(lightGrow, that.lightGrow, "lightGrow", log);
-    equalWithLog(lightSeed, that.lightSeed, "lightSeed", log);
-    equalWithLog(lightWork, that.lightWork, "lightWork", log);
-    equalWithLog(internalTime, that.internalTime, "internalTime", log);
-    equalWithLog(globalTime, that.globalTime, "globalTime", log);
-
-
-    if (log.size() != 0) {
-      logger.debug("Environment fields are different!\n{}", log.stream().collect(Collectors.joining("\n")));
-    }
-
-    return log.size() == 0;
-  }
-
-  public boolean equalsReflection(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Environment that = (Environment) o;
@@ -244,11 +220,12 @@ public class Environment implements Entity {
       }
 
     } catch (Exception ex) {
-      ex.printStackTrace();
+      logger.error(ex.getMessage(), ex);
+      throw new EntityException("override method toString is a reason!", ex);
     }
 
     if (log.size() != 0) {
-      logger.debug("Environment fields are different!\n{}", log.stream().collect(Collectors.joining("\n")));
+      logger.info("Environment fields are different!\n{}", log.stream().collect(Collectors.joining("\n")));
     }
 
     return log.size() == 0;
@@ -256,14 +233,10 @@ public class Environment implements Entity {
 
   private List<String> equalWithLog(Object expected, Object actual, String name, List<String> log) {
     if (!expected.equals(actual)) {
-      log.add(formatRight("expected " + name) + expected);
-      log.add(formatRight("actual " + name) + actual);
+      log.add(formatRight("expected " + name,25) + expected);
+      log.add(formatRight("actual " + name,25) + actual);
     }
     return log;
-  }
-
-  private String formatRight(String s) {
-    return String.format("%25s = ", s);
   }
 
   @Override
