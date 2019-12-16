@@ -130,9 +130,9 @@ public class ContainerDao implements ContainersDao {
       while (tblContainers.next()) {
         System.out.println();
         Environment environment = new Environment();
-        for (int i = 0; i < tblContainers.getMetaData().getColumnCount(); i++) {
-          System.out.print(tblContainers.getString(i + 1) + " : ");
-        }
+//        for (int i = 0; i < tblContainers.getMetaData().getColumnCount(); i++) {
+//          System.out.print(tblContainers.getString(i + 1) + " : ");
+//        }
         environment.setContainerId(tblContainers.getInt("containerId"));
         environment.setAirTemp(tblContainers.getInt("airTemp"));
         environment.setAirHumidity(tblContainers.getInt("airHumidity"));

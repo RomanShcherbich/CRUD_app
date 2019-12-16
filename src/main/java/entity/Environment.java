@@ -1,5 +1,8 @@
 package entity;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.lang.reflect.Method;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -22,6 +25,7 @@ public class Environment implements Entity {
   private boolean lightWork;
   private Timestamp internalTime;
   private Timestamp globalTime;
+  private static final Logger logger = LoggerFactory.getLogger(Environment.class);
 
   public Environment(int containerId, int airTemp, int airHumidity, int airCo2, boolean airVentilation, int waterPh,
                      int waterEc, boolean lightGrow, boolean lightSeed, boolean lightWork, Timestamp internalTime,
@@ -185,8 +189,7 @@ public class Environment implements Entity {
     return log;
   }
 
-  @Override
-  public boolean equals(Object o) {
+  public boolean equalsReflection(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Environment that = (Environment) o;
@@ -211,24 +214,9 @@ public class Environment implements Entity {
           + log.stream().collect(Collectors.joining("\n")));
     }
     return log.size() == 0;
-//        containerId == that.containerId &&
-//        airTemp == that.airTemp &&
-//        airHumidity == that.airHumidity &&
-////        internalTime.toString().substring(0,23).equals(that.internalTime.toString().substring(0,23)) &&
-////        globalTime.toString().substring(0,23).equals(that.globalTime.toString().substring(0,23));
-//        globalTime.equals(that.globalTime) &&
-//        internalTime.equals(that.internalTime);
-//        globalTime.getDayOfYear() == that.globalTime.getDayOfYear() &&
-//        globalTime.getHour() == that.globalTime.getHour() &&
-//        globalTime.getMinute() == that.globalTime.getMinute() &&
-//        globalTime.getSecond()== that.globalTime.getSecond() &&
-//        internalTime.getDayOfYear() == that.internalTime.getDayOfYear() &&
-//        internalTime.getHour() == that.internalTime.getHour() &&
-//        internalTime.getMinute() == that.internalTime.getMinute() &&
-//        internalTime.getSecond()== that.internalTime.getSecond()+1;
   }
 
-  public boolean equalsReflection(Object o) {
+  public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Environment that = (Environment) o;
@@ -255,9 +243,11 @@ public class Environment implements Entity {
     }
 
     if (log.size() != 0) {
-      throw new java.lang.AssertionError("Environment fields are different!\n"
-          + log.stream().collect(Collectors.joining("\n")));
+//      throw new java.lang.AssertionError("Environment fields are different!\n"
+//          + log.stream().collect(Collectors.joining("\n")));
+      logger.debug("Environment fields are different!\n{}",log.stream().collect(Collectors.joining("\n")));
     }
+
     return log.size() == 0;
   }
 

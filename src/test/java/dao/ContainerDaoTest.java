@@ -3,6 +3,8 @@ package dao;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -17,6 +19,8 @@ public class ContainerDaoTest {
   public static Method post;
   public static Object dao;
   public static Method get;
+
+  private static final Logger logger = LoggerFactory.getLogger(ContainerDaoTest.class);
 
   @BeforeClass
   public static void setUp() {
@@ -44,6 +48,8 @@ public class ContainerDaoTest {
     Object actualEnv = ((ArrayList)invokeMethod(get,1)).get(0);
     actualEnv  = instanceOfEnv(1, 24, 60);
 
+//    logger.debug("Test {}", actualEnv);
+
     Assert.assertTrue("Expected environment: \n" + expectedEnv.toString()
             + "Actual environment: \n" + actualEnv.toString()
         , expectedEnv.equals(actualEnv));
@@ -51,10 +57,10 @@ public class ContainerDaoTest {
 
   @Test
   public void insertEnvironmentReflectionTest() throws ClassNotFoundException {
-    Object expectedEnv = instanceOfEnv(1, 23, 60);
+    Object expectedEnv = instanceOfEnv(1, 55, 60);
     invokeMethod(post, expectedEnv);
     Object actualEnv = ((ArrayList)invokeMethod(get,1)).get(0);
-    actualEnv  = instanceOfEnv(1, 24, 60);
+    actualEnv  = instanceOfEnv(1, 56, 60);
 
     Assert.assertTrue("Expected environment: \n" + expectedEnv.toString()
             + "Actual environment: \n" + actualEnv.toString()
