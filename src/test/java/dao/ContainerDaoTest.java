@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class ContainerDaoTest {
@@ -50,11 +51,15 @@ public class ContainerDaoTest {
     logger.debug("Object expectedEnv \n{}", expectedEnv);
     List<String> expectedFields = Arrays.asList(expectedEnv.toString().split(";"));
     List<String> actualFields = Arrays.asList(actualEnv.toString().split(";"));
-    expectedFields.replaceAll(e -> actualFields.contains(e));
-    actualFields.removeAll(expectedFields);
 
-    Assert.assertTrue("Environment fields are different!\n"
-        + expectedEnv.toString() + "\n" + actualEnv.toString(), expectedEnv.equals(actualEnv));
+    Assert.assertTrue("Environment fields are different!"
+        + "\nexpected" + expectedFields.stream()
+            .filter(str -> !actualFields.contains(str))
+            .collect(Collectors.joining("; "))
+        + "\nactual" + actualFields.stream()
+            .filter(str -> !expectedFields.contains(str))
+            .collect(Collectors.joining("; ")),
+        expectedEnv.equals(actualEnv));
   }
 
   @Test
