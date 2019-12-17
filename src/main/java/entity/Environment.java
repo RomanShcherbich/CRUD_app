@@ -1,6 +1,6 @@
 package entity;
 
-import static utils.StringUtils.formatRight;
+import static utils.StringUtils.formatLeftRight;
 
 import exception.EntityException;
 import org.slf4j.Logger;
@@ -8,11 +8,9 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class Environment implements Entity {
   private int containerId;
@@ -184,7 +182,7 @@ public class Environment implements Entity {
           name = name.replace("is", "");
           name = name.substring(0, 1).toLowerCase() + name.substring(1);
           String value = m.invoke(this).toString();
-          string += formatRight(name,4) + value + "; ";
+          string += formatLeftRight(name,4) + value + "; ";
         }
       }
 
@@ -201,46 +199,17 @@ public class Environment implements Entity {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Environment that = (Environment) o;
-
-    List<String> log = new ArrayList<>();
-
-    try {
-      List<Method> methods = Arrays.stream(getClass().getMethods())
-          .filter(m -> m.getName().contains("get") && !m.getName().contains("Class"))
-          .collect(Collectors.toList());
-      for (Method getValue :
-          methods) {
-        String name = getValue.getName();
-        name = name.substring(3, 4).toLowerCase() + name.substring(4);
-        Object exValue = getValue.invoke(this);
-        Object acValue = getValue.invoke(that);
-
-        equalWithLog(exValue, acValue, name, log);
-
-      }
-
-    } catch (Exception ex) {
-      logger.error(ex.getMessage(), ex);
-      throw new EntityException("override method toString is a reason!", ex);
-    }
-
-    if (log.size() != 0) {
-      logger.info("Environment fields are different!\n{}", log.stream().collect(Collectors.joining("\n")));
-    }
-
-    return log.size() == 0;
-  }
-
-  private List<String> equalWithLog(Object expected, Object actual, String name, List<String> log) {
-    if (!expected.equals(actual)) {
-      log.add(formatRight("expected " + name,25) + expected);
-      log.add(formatRight("actual " + name,25) + actual);
-    }
-    return log;
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(containerId, airTemp, airHumidity, globalTime, internalTime);
+    return getContainerId() == that.getContainerId() &&
+        getAirTemp() == that.getAirTemp() &&
+        getAirHumidity() == that.getAirHumidity() &&
+        getAirCo2() == that.getAirCo2() &&
+        isAirVentilation() == that.isAirVentilation() &&
+        Double.compare(that.getWaterPh(), getWaterPh()) == 0 &&
+        getWaterEc() == that.getWaterEc() &&
+        isLightGrow() == that.isLightGrow() &&
+        isLightSeed() == that.isLightSeed() &&
+        isLightWork() == that.isLightWork() &&
+        Objects.equals(getInternalTime(), that.getInternalTime()) &&
+        Objects.equals(getGlobalTime(), that.getGlobalTime());
   }
 }

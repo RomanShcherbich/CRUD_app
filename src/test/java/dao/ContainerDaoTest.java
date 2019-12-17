@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,19 +46,11 @@ public class ContainerDaoTest {
     invokeMethod(post, expectedEnv);
     Object actualEnv = ((ArrayList) invokeMethod(get, 1)).get(0);
 
-    actualEnv  = instanceOfEnv(1, 24, 60);
+//    actualEnv  = instanceOfEnv(1, 24, 60);
     logger.debug("Object expectedEnv \n{}", expectedEnv);
-    List<String> expectedFields = Arrays.asList(expectedEnv.toString().split(";"));
-    List<String> actualFields = Arrays.asList(actualEnv.toString().split(";"));
+    String comparedStrings = utils.StringUtils.compareObjectsByString(expectedEnv,actualEnv);
 
-    Assert.assertTrue("Environment fields are different!"
-        + "\nexpected" + expectedFields.stream()
-            .filter(str -> !actualFields.contains(str))
-            .collect(Collectors.joining("; "))
-        + "\nactual" + actualFields.stream()
-            .filter(str -> !expectedFields.contains(str))
-            .collect(Collectors.joining("; ")),
-        expectedEnv.equals(actualEnv));
+    Assert.assertTrue("Environment fields are different!" + comparedStrings, expectedEnv.equals(actualEnv));
   }
 
   @Test
